@@ -17,7 +17,7 @@ int main(void) {
 
 		switch (userChoice) {
 		case 1:
-			userInput(list);
+			userInput(&list);
 			break;
 		case 2:
 			//

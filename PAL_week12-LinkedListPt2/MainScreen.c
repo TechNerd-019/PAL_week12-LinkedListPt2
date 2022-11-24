@@ -11,7 +11,6 @@ void displayMenu(void) {
 	puts("3. Search for book.");
 	puts("4. Exit.");
 
-
 	return 0;
 
 }
