@@ -1,6 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "List.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <malloc.h>
 
 PLISTNODE userInput(PLISTNODE* list) {
@@ -22,14 +24,14 @@ PLISTNODE userInput(PLISTNODE* list) {
 
 	puts("Processing...");
 
-	PLISTNODE* newNode = createABook(volume, name, author);
-	*list = addBookToList(&list, &newNode);
+	PLISTNODE newNode = createABook(volume, name, author);
+	list = addBookToList(list, newNode);
 
 	return list;
 	
 }
 
-PLISTNODE* createABook(int volume, char name[], char author[]) {
+PLISTNODE createABook(int volume, char name[], char author[]) {
 
 	PLISTNODE newBook = (PLISTNODE)malloc(sizeof(LIST));
 
@@ -47,35 +49,79 @@ PLISTNODE* createABook(int volume, char name[], char author[]) {
 	newBook->next = NULL;
 	newBook->prev = NULL;
 
-	return &newBook;
+	return newBook;
 }
 
 PLISTNODE addBookToList(PLISTNODE* list, PLISTNODE newNode) {
 
-	if (list == NULL) {
-
-		list = newNode;
+	if (*list == NULL) 
+	{
+		*list = newNode;
 	}
 
-	PLISTNODE currentNode = list;
+	PLISTNODE currentNode = *list;
 	PLISTNODE previousNode = currentNode->prev;
 
 	//This makes sense to Hayden.
-	while (currentNode->next != NULL) {
+	while (currentNode->next != NULL) 
+	{
 		previousNode = currentNode;
 		currentNode = currentNode->next;
 	}
-
 	currentNode->next = newNode;
 	newNode->prev = currentNode;
 
+	return *list;
 }
 
-//while (currentBook->next != NULL) //Crawl through the list until the next is pointing to null
-//{
-//	currentBook = currentBook->next;
-//}
-//
-//prevBook = currentBook->next; //re-reference the previous book to the list
-//currentBook->next = newBook; //re-reference the next pointer from null to the newBook
-//newBook->prev = prevBook; //reference the newBook prve to curr
+PLISTNODE deleteNode(PLISTNODE* list, char title[]) 
+{
+	if (*list == NULL)
+	{
+		puts("List is empty. Nothing to delete.");
+	}
+
+	PLISTNODE currentItem = *list;
+
+	if (currentItem->title == title)
+	{
+		if (currentItem->next != NULL)
+		{
+			currentItem->prev = currentItem;
+			*list = currentItem->next;
+
+		}
+
+		else
+		{
+			*list = NULL;
+			return *list;
+		}
+		free(currentItem);
+		return *list;
+	}
+
+	while (currentItem != NULL && currentItem->title != title)
+	{
+		currentItem->prev = currentItem;
+		currentItem = currentItem->next;
+
+	}
+
+	if (currentItem == NULL)
+	{
+		puts("Item with title does not exist.");
+		return *list;
+	}
+
+	currentItem->prev = currentItem;
+	currentItem = currentItem->next;
+	
+	printf("Item %s has been deleted.", title);
+
+	free(currentItem);
+	
+	return *list;
+}
+
+
