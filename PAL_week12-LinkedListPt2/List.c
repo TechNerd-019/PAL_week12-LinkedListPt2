@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 
-PLISTNODE userInput(PLISTNODE* list) {
+PLISTNODE userInput(PLISTNODE list) {
 
 	char name[MAXLENGTH];
 	char author[MAXLENGTH];
@@ -52,14 +52,15 @@ PLISTNODE createABook(int volume, char name[], char author[]) {
 	return newBook;
 }
 
-PLISTNODE addBookToList(PLISTNODE* list, PLISTNODE newNode) {
+PLISTNODE addBookToList(PLISTNODE list, PLISTNODE newNode) {
 
-	if (*list == NULL) 
+	if (list == NULL) 
 	{
-		*list = newNode;
+		list = newNode;
+		return list;
 	}
 
-	PLISTNODE currentNode = *list;
+	PLISTNODE currentNode = list;
 	PLISTNODE previousNode = currentNode->prev;
 
 	//This makes sense to Hayden.
@@ -71,57 +72,52 @@ PLISTNODE addBookToList(PLISTNODE* list, PLISTNODE newNode) {
 	currentNode->next = newNode;
 	newNode->prev = currentNode;
 
-	return *list;
+	return list;
 }
 
-PLISTNODE deleteNode(PLISTNODE* list, char title[]) 
+PLISTNODE deleteNode(PLISTNODE list, char title[]) 
 {
-	if (*list == NULL)
+	if (list == NULL)
 	{
 		puts("List is empty. Nothing to delete.");
 	}
 
-	PLISTNODE currentItem = *list;
+	PLISTNODE currentItem = list;
 
-	if (currentItem->title == title)
+	if (strcmp(currentItem->title, title) == 0)
 	{
 		if (currentItem->next != NULL)
 		{
 			currentItem->prev = currentItem;
-			*list = currentItem->next;
-
+			list = currentItem->next;
 		}
-
 		else
 		{
-			*list = NULL;
-			return *list;
+			list = NULL;
+			printf("Item %s has been deleted.", title);
+			return list;
 		}
 		free(currentItem);
-		return *list;
+		return list;
 	}
 
 	while (currentItem != NULL && currentItem->title != title)
 	{
 		currentItem->prev = currentItem;
 		currentItem = currentItem->next;
-
 	}
 
 	if (currentItem == NULL)
 	{
 		puts("Item with title does not exist.");
-		return *list;
+		return list;
 	}
+	currentItem->prev = currentItem->next;
 
-	currentItem->prev = currentItem;
-	currentItem = currentItem->next;
-	
 	printf("Item %s has been deleted.", title);
-
 	free(currentItem);
 	
-	return *list;
+	return list;
 }
 
 

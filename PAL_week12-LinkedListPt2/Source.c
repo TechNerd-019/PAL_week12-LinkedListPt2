@@ -1,5 +1,5 @@
-#include "List.h"
 #include "MainScreen.h"
+#include "Disk.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -14,6 +14,8 @@ int main(void) {
 	int userChoice;
 	char buf[NUM_SIZE_BYTES];
 	char itemToDelete[MAXLENGTH];
+
+	readFromDisk(list);
 	do {
 		displayMenu();
 
@@ -27,26 +29,26 @@ int main(void) {
 
 		switch (userChoice) {
 		case 1:
-			userInput(&list);
+			list = userInput(list);
 			break;
 		case 2:
 			puts("What is the title of the book to delete? ");
 			fgets(itemToDelete, MAXLENGTH, stdin);
 			itemToDelete[strlen(itemToDelete) - 1] = '\0';
-			deleteNode(&list, itemToDelete);
+			deleteNode(list, itemToDelete);
 			break;
 		case 3:
 			//
 			break;
 		case 4:
-			isRunning == false;
+			saveToDisk(list);
+			isRunning = false;
 			break;
 		}
 	} while (isRunning == true);
 
+
 	// Function to save list before exiting the program.
-
-
 	return 0;
 }
 

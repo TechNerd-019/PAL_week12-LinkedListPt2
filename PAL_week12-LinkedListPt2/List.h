@@ -27,13 +27,12 @@ typedef struct list {
 
 }LIST, *PLISTNODE;
 
-PLISTNODE addBookToList(PLISTNODE*, PLISTNODE*);
-PLISTNODE userInput(PLISTNODE*);
-PLISTNODE deleteNode(PLISTNODE*, char[]);
+PLISTNODE addBookToList(PLISTNODE, PLISTNODE);
+PLISTNODE userInput(PLISTNODE);
+PLISTNODE deleteNode(PLISTNODE, char[]);
 PLISTNODE createABook(int, char[], char[]);
 //void searchBook(PLISTNODE, char[]);
-//void saveToDisk(PLISTNODE);
-//void readFromDisk(PLISTNODE);
+
 
 
 
